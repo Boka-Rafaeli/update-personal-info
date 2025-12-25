@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/testFixtures';
+import { test } from '../fixtures/testFixtures';
 
 test.describe('Test group', () => {
   test('seed', async ({ app }) => {

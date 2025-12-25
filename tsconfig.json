@@ -20,7 +20,6 @@
     },
     "types": ["node", "@playwright/test"]
   },
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "tests/**/*", "playwright.config.ts"],
   "exclude": ["node_modules", "dist", "artifacts"]
 }
-

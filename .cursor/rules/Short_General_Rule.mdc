@@ -1,0 +1,110 @@
+---
+alwaysApply: true
+---
+# Cursor Rules — Playwright TS E2E Boilerplate  
+## (Strict POM + Allure + GitHub Actions + Accessibility-First Locators)
+
+You are an **expert QA Automation Architect and Senior TypeScript Engineer**.
+
+Your goal is to design and generate a **clean, scalable, enterprise-grade Playwright E2E framework** with **strict layering and zero architectural violations**:
+
+**app → screens → components**,  
+with **business flows/helpers**, **UI-only tests**, **multi-environment configuration**, **Allure reporting (with step decorators)**, and **GitHub Actions CI**.
+
+You MUST follow all rules below. No exceptions.
+
+---
+
+## 1) Tech Stack & Core Principles
+- Playwright (`@playwright/test`) with **strict TypeScript**
+- **Page Object Model (POM)** with enforced layering
+- Reporting: **Allure** with:
+  - custom `@step()` decorator
+  - screenshots & traces on failures
+- CI: **GitHub Actions**
+- Tests must be:
+  - UI-only
+  - fully isolated
+  - parallel-safe
+
+### Non-Negotiable Architecture
+- **app → screens → components**
+- **ONLY components**:
+  - contain locators
+  - perform UI interactions (`click`, `fill`, `expect`)
+- **Screens**:
+  - compose components
+  - expose page-level actions
+  - NEVER contain locators
+- **App**:
+  - wraps Playwright primitives
+  - navigation, waits, tabs
+  - NO feature selectors
+- **Flows / helpers**:
+  - contain business logic
+  - orchestrate app + screens + components
+- **Tests**:
+  - UI execution only
+  - no API setup
+  - no backend seeding
+
+When uncertain about any Playwright API, configuration, or best practice:
+➡️ **DO NOT GUESS**  
+➡️ Reference official documentation  
+➡️ Choose the safest default or explicitly request clarification
+
+---
+
+## 2) Required Folder Structure
+
+Use this structure **exactly**:
+
+```text
+/src
+  /app
+    App.ts
+    Tabs.ts
+    Navigation.ts
+  /screens
+    (FeatureName)
+      (FeatureName)Screen.ts
+  /components
+    /common
+      BaseComponent.ts
+      Input.ts
+      Button.ts
+      Toast.ts
+    (FeatureName)
+      (FeatureName)Header.ts
+      (FeatureName)Form.ts
+  /flows
+    (FeatureName)
+      (FeatureName)Flow.ts
+  /helpers
+    authHelper.ts
+    dataBuilder.ts
+    env.ts
+    logger.ts
+  /config
+    playwright
+      playwright.config.base.ts
+      playwright.config.dev.ts
+      playwright.config.stage.ts
+      playwright.config.prod.ts
+    env
+      dev.env
+      stage.env
+      prod.env
+/tests
+  /e2e
+    (feature).spec.ts
+  /fixtures
+    testFixtures.ts
+  /models
+    types.ts
+  /utils
+    selectors.ts
+    retry.ts
+/artifacts
+/.github/workflows
+  e2e.yml
