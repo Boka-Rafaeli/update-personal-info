@@ -48,6 +48,31 @@ You MUST follow all rules below. No exceptions.
   - no API setup
   - no backend seeding
 
+### Locator Strategy - ID-Only Rule
+**CRITICAL**: All element locators MUST use **ONLY element IDs** (`getByTestId`, `getByRole` with `name` that matches ID, or direct `id` attribute).
+
+**Strict Requirements**:
+- **ONLY** use `page.getByTestId('element-id')` or `page.locator('#element-id')` for element selection
+- **FORBIDDEN**: CSS selectors (`.class`, `[attribute]`), XPath, text-based locators (`getByText`), or any other selector strategy
+- If an element **does not have an ID** or **cannot be found by ID**:
+  - **STOP immediately**
+  - **DO NOT** create alternative selectors
+  - **DO NOT** guess or use fallback strategies
+  - **ASK the user** to provide the correct ID or add an ID to the element
+  - **WAIT for user confirmation** before proceeding
+
+**Example**:
+```typescript
+// ✅ CORRECT - Using ID only
+this.submitButton = page.getByTestId('submit-button');
+this.emailInput = page.locator('#email-input');
+
+// ❌ FORBIDDEN - Using other selectors
+this.submitButton = page.locator('.btn-submit'); // NO!
+this.emailInput = page.getByText('Email'); // NO!
+this.emailInput = page.locator('input[type="email"]'); // NO!
+```
+
 When uncertain about any Playwright API, configuration, or best practice:
 ➡️ **DO NOT GUESS**  
 ➡️ Reference official documentation  

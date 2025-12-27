@@ -9,7 +9,7 @@ const config = loadEnvConfig(env);
 /**
  * Main Playwright configuration for E2E tests
  * Uses environment-specific settings based on ENV variable
- * 
+ *
  * Usage:
  * - ENV=stage npm test (default)
  * - ENV=prod npm test
@@ -18,15 +18,15 @@ export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 1, // Retry failed tests 1 time for both CI and local
+  retries: 0, // Retry failed tests 0 time for both CI and local
   workers: process.env.CI ? 1 : undefined,
-  
+
   // Timeouts
   timeout: 60000, // Test timeout: 60000ms
   expect: {
     timeout: 30000, // Expect timeout: 30000ms
   },
-  
+
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
     ['allure-playwright', { outputFolder: 'allure-results' }],
@@ -45,7 +45,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { 
+      use: {
         // Browser config can be extended per environment if needed
       },
     },

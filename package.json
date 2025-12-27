@@ -4,6 +4,7 @@
   "description": "Modern Playwright E2E framework boilerplate with POM, Allure reporting, and multi-env support",
   "main": "index.js",
   "scripts": {
+    "1": "playwright test tests/e2e/view-profile-settings-screen.spec.ts",
     "test": "playwright test",
     "test:dev": "ENV=dev playwright test",
     "test:stage": "ENV=stage playwright test",
@@ -20,7 +21,13 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky install"
   },
-  "keywords": ["playwright", "e2e", "testing", "typescript", "pom"],
+  "keywords": [
+    "playwright",
+    "e2e",
+    "testing",
+    "typescript",
+    "pom"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",

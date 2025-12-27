@@ -4,4 +4,4 @@
  */
 
 export { FooterComponent } from './footer';
-
+export { SideMenuComponent } from './sideMenu';
