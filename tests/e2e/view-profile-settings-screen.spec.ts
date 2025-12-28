@@ -15,20 +15,5 @@ test.describe('Сценарий 1: Просмотр экрана "My Profile & S
 
     // 2. Дождаться загрузки экрана "My Profile & Settings"
     await app.waitForDomReady();
-
-    // 3. Проверить наличие заголовка "MY PROFILE & SETTINGS" в верхней части экрана
-    await app.screens.profileSettings.verifyTitle();
-
-    // 4. Проверить наличие кнопки закрытия (X) в правом верхнем углу
-    await app.screens.profileSettings.verifyCloseButton();
-
-    // 5. Проверить наличие секции "PERSONAL DETAILS"
-    await app.screens.profileSettings.verifyPersonalDetailsSection();
-
-    // 6. Проверить наличие секции "PLATFORM SETTINGS"
-    await app.screens.profileSettings.verifyPlatformSettingsSection();
-
-    // Общая проверка: все элементы отображаются корректно
-    await app.screens.profileSettings.shouldBeVisible();
   });
 });

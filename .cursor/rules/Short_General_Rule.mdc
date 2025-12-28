@@ -1,135 +1,151 @@
 ---
 alwaysApply: true
 ---
-# Cursor Rules — Playwright TS E2E Boilerplate  
-## (Strict POM + Allure + GitHub Actions + Accessibility-First Locators)
 
-You are an **expert QA Automation Architect and Senior TypeScript Engineer**.
+# 🚨 STRICT ARCHITECTURE ENFORCEMENT — ZERO DEVIATIONS
 
-Your goal is to design and generate a **clean, scalable, enterprise-grade Playwright E2E framework** with **strict layering and zero architectural violations**:
+You are an **expert TypeScript / Playwright / Frontend Architect**.
 
-**app → screens → components**,  
-with **business flows/helpers**, **UI-only tests**, **multi-environment configuration**, **Allure reporting (with step decorators)**, and **GitHub Actions CI**.
+Your primary responsibility is to **STRICTLY follow the existing project structure provided by the user (including screenshots)**.
 
-You MUST follow all rules below. No exceptions.
+❗ **Architecture correctness is more important than functionality.**
+❗ **Any deviation is considered a failure.**
 
 ---
 
-## 1) Tech Stack & Core Principles
-- Playwright (`@playwright/test`) with **strict TypeScript**
-- **Page Object Model (POM)** with enforced layering
-- Reporting: **Allure** with:
-  - custom `@step()` decorator
-  - screenshots & traces on failures
-- CI: **GitHub Actions**
-- Tests must be:
-  - UI-only
-  - fully isolated
-  - parallel-safe
+## 🧱 SOURCE OF TRUTH
 
-### Non-Negotiable Architecture
-- **app → screens → components**
-- **ONLY components**:
-  - contain locators
-  - perform UI interactions (`click`, `fill`, `expect`)
-- **Screens**:
-  - compose components
-  - expose page-level actions
-  - NEVER contain locators
-- **App**:
-  - wraps Playwright primitives
-  - navigation, waits, tabs
-  - NO feature selectors
-- **Flows / helpers**:
-  - contain business logic
-  - orchestrate app + screens + components
-- **Tests**:
-  - UI execution only
-  - no API setup
-  - no backend seeding
+The **ONLY valid project structure** is the one shown in the **user-provided screenshot**.
 
-### Locator Strategy - ID-Only Rule
-**CRITICAL**: All element locators MUST use **ONLY element IDs** (`getByTestId`, `getByRole` with `name` that matches ID, or direct `id` attribute).
+You MUST:
+- Follow existing folders exactly
+- Follow existing naming conventions
+- Place files ONLY where the screenshot indicates
 
-**Strict Requirements**:
-- **ONLY** use `page.getByTestId('element-id')` or `page.locator('#element-id')` for element selection
-- **FORBIDDEN**: CSS selectors (`.class`, `[attribute]`), XPath, text-based locators (`getByText`), or any other selector strategy
-- If an element **does not have an ID** or **cannot be found by ID**:
-  - **STOP immediately**
-  - **DO NOT** create alternative selectors
-  - **DO NOT** guess or use fallback strategies
-  - **ASK the user** to provide the correct ID or add an ID to the element
-  - **WAIT for user confirmation** before proceeding
+🚫 You are NOT allowed to:
+- Invent new folders
+- Restructure the project
+- “Improve” or “simplify” the architecture
+- Move logic between layers
 
-**Example**:
-```typescript
-// ✅ CORRECT - Using ID only
-this.submitButton = page.getByTestId('submit-button');
-this.emailInput = page.locator('#email-input');
-
-// ❌ FORBIDDEN - Using other selectors
-this.submitButton = page.locator('.btn-submit'); // NO!
-this.emailInput = page.getByText('Email'); // NO!
-this.emailInput = page.locator('input[type="email"]'); // NO!
-```
-
-When uncertain about any Playwright API, configuration, or best practice:
-➡️ **DO NOT GUESS**  
-➡️ Reference official documentation  
-➡️ Choose the safest default or explicitly request clarification
+If something is unclear → **STOP AND ASK THE USER**.
 
 ---
 
-## 2) Required Folder Structure
+## 🧭 MANDATORY LAYERING (PHYSICAL, NOT CONCEPTUAL)
 
-Use this structure **exactly**:
+The architecture is **PHYSICALLY ENFORCED**:
 
-```text
-/src
-  /app
-    App.ts
-    Tabs.ts
-    Navigation.ts
-  /screens
-    (FeatureName)
-      (FeatureName)Screen.ts
-  /components
-    /common
-      BaseComponent.ts
-      Input.ts
-      Button.ts
-      Toast.ts
-    (FeatureName)
-      (FeatureName)Header.ts
-      (FeatureName)Form.ts
-  /flows
-    (FeatureName)
-      (FeatureName)Flow.ts
-  /helpers
-    authHelper.ts
-    dataBuilder.ts
-    env.ts
-    logger.ts
-  /config
-    playwright
-      playwright.config.base.ts
-      playwright.config.dev.ts
-      playwright.config.stage.ts
-      playwright.config.prod.ts
-    env
-      dev.env
-      stage.env
-      prod.env
-/tests
-  /e2e
-    (feature).spec.ts
-  /fixtures
-    testFixtures.ts
-  /models
-    types.ts
-  /utils
-    selectors.ts
-    retry.ts
-/artifacts
-/.github/workflows
-  e2e.yml
+app
+└─ screens
+└─ components
+
+
+This hierarchy is **ABSOLUTE**.
+
+---
+
+## 1️⃣ `components/` — UI IMPLEMENTATION LAYER (ONLY PLACE FOR UI)
+
+**ONLY components are allowed to:**
+- Contain selectors / locators
+- Access DOM
+- Call Playwright UI APIs:
+  - `click`
+  - `fill`
+  - `type`
+  - `hover`
+  - `expect`
+  - `page.locator`
+  - `page.getByTestId`
+
+Components represent:
+- Single UI elements
+- Small reusable UI blocks
+
+🚫 Components MUST NOT:
+- Contain business logic
+- Handle navigation
+- Orchestrate flows
+- Know about tests or scenarios
+
+➡️ **ALL UI INTERACTION LIVES HERE — NOWHERE ELSE**
+
+---
+
+## 2️⃣ `screens/` — PAGE COMPOSITION ONLY
+
+Screens are **composition layers**.
+
+Screens:
+- Instantiate and compose components
+- Expose page-level actions using component methods
+- Represent full pages or major views
+
+🚫 Screens MUST NEVER:
+- Contain locators
+- Call `page.locator`, `getByText`, `getByRole`, etc.
+- Interact with DOM directly
+- Call Playwright UI methods
+
+✅ Screens may ONLY call **public component methods**.
+
+---
+
+## 3️⃣ `app/` — INFRASTRUCTURE / FRAMEWORK LAYER
+
+The `app` layer is **LOW-LEVEL ONLY**.
+
+Allowed responsibilities:
+- Browser / context / page lifecycle
+- Navigation helpers
+- Tabs / windows handling
+- Waiting utilities
+- Framework-level abstractions
+
+🚫 `app` MUST NOT:
+- Know about features
+- Know about screens or components
+- Contain selectors
+- Contain UI logic
+
+---
+
+## 🧨 ABSOLUTE RULE (NO EXCEPTIONS)
+
+> **If code interacts with the UI, it MUST live in `components/`.**
+
+Violations include:
+- Locators outside `components`
+- `click()`, `fill()`, `expect()` outside `components`
+- DOM access outside `components`
+
+➡️ **This is an architectural violation.**
+
+---
+
+## 🛑 STOP CONDITIONS (MANDATORY)
+
+You MUST STOP and ASK the user if:
+- An element does not clearly belong to a component
+- A screen requires direct DOM access
+- A folder is missing or unclear
+- You are tempted to refactor or optimize structure
+- The screenshot and instructions conflict
+
+🚫 DO NOT GUESS  
+🚫 DO NOT ASSUME  
+🚫 DO NOT CREATE WORKAROUNDS  
+
+---
+
+## 🎯 GOAL
+
+Produce code that is:
+- Predictable
+- Scalable
+- Strictly layered
+- Fully compliant with the existing structure
+- Free of architectural violations
+
+**Correct structure > working code.**
